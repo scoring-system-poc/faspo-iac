@@ -1,0 +1,22 @@
+resource "azurerm_private_endpoint" "iacsa-pen" {
+  name = "${var.APP_NAME}-${var.ENV}-iacsa-pen"
+
+  resource_group_name = azurerm_resource_group.net-rg.name
+  location            = azurerm_resource_group.net-rg.location
+
+  subnet_id                     = azurerm_subnet.vnet-subnet-infra.id
+  custom_network_interface_name = "${var.APP_NAME}-${var.ENV}-iacsa-pen-nic"
+
+  private_service_connection {
+    private_connection_resource_id = azurerm_storage_account.iac-sa.id
+    name                           = "iacsa-pen-connection"
+    is_manual_connection           = false
+    subresource_names              = ["blob"]
+  }
+
+  depends_on = [
+    azurerm_resource_group.net-rg,
+    azurerm_subnet.vnet-subnet-infra,
+    azurerm_storage_account.iac-sa
+  ]
+}

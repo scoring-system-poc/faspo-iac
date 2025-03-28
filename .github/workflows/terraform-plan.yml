@@ -1,0 +1,78 @@
+name: "[sync] terraform plan for <ENV>"
+run-name: "[sync] terraform plan for ${{ github.base_ref }}"
+
+on:
+  pull_request:
+    branches:
+      - env/*
+
+jobs:
+  terraform-plan:
+    runs-on: azure-integrated-runner-01
+
+    environment: ${{ github.base_ref }}
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: terraform/
+
+    permissions:
+      id-token: write
+      pull-requests: write
+
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform init
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ secrets.AZURE_IAC_RG }}" \
+            -backend-config="storage_account_name=${{ secrets.AZURE_IAC_SA }}"
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform plan
+        run: |
+          terraform plan \
+            -var="AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" \
+            -var="AZURE_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" \
+            -var="AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+            -out terraform.plan
+
+      - name: Post plan to PR comments
+        run: |
+          echo '### [ ${{ github.base_ref }} ] terraform plan' >> _tf_show_plan.log
+          echo '```' >> _tf_show_plan.log
+
+          terraform show -no-color terraform.plan &>> _tf_show_plan.log
+
+          echo '```' >> _tf_show_plan.log
+
+          gh pr comment ${{ github.event.number }} --create-if-none --edit-last --body-file _tf_show_plan.log
+
+      - name: Publish terraform plan to AZ storage account
+        run: |
+          az storage blob upload \
+            --account-name ${{ secrets.AZURE_IAC_SA }} \
+            --name terraform.plan.PR#${{ github.event.pull_request.number }} \
+            --container-name tfplan \
+            --type block \
+            --overwrite \
+            --file terraform.plan \
+            --auth-mode login

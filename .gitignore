@@ -1,0 +1,6 @@
+# JetBrains IDE
+.idea/
+
+# Terraform files
+.terraform.lock.hcl
+.terraform/
