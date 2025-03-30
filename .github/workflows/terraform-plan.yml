@@ -8,7 +8,8 @@ on:
 
 jobs:
   terraform-plan:
-    runs-on: azure-integrated-runners
+    runs-on:
+      group: azure-integrated-runners
 
     environment: ${{ github.base_ref }}
 

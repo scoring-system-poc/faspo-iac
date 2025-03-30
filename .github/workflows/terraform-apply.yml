@@ -12,7 +12,8 @@ jobs:
   terraform-apply:
     if: github.event.pull_request.merged == true
 
-    runs-on: azure-integrated-runners
+    runs-on:
+      group: azure-integrated-runners
 
     environment: ${{ github.ref_name }}
 
