@@ -8,7 +8,7 @@ on:
 
 jobs:
   terraform-plan:
-    runs-on: azure-integrated-runner-01
+    runs-on: azure-integrated-runners
 
     environment: ${{ github.base_ref }}
 
@@ -29,6 +29,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.SELF_DEPLOY_KEY }}
 
       - uses: azure/login@v2
         with:

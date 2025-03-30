@@ -1,5 +1,5 @@
-resource "azapi_resource" "ghb-network-setting" {
-  name = "${var.APP_NAME}${var.ENV}ghbns"
+resource "azapi_resource" "ghb-ns" {
+  name = "${var.APP_NAME}-${var.ENV}-ghb-ns"
 
   type      = "GitHub.Network/networkSettings@2024-04-02"
   parent_id = azurerm_resource_group.net-rg.id
@@ -7,7 +7,7 @@ resource "azapi_resource" "ghb-network-setting" {
 
   body = {
     properties = {
-      subnetId   = azurerm_subnet.vnet-subnet-ghb.id
+      subnetId   = azurerm_subnet.vnet-ghb-subnet.id
       businessId = var.GHB_DATABASE_ID
     }
   }
@@ -18,6 +18,6 @@ resource "azapi_resource" "ghb-network-setting" {
 
   depends_on = [
     azurerm_resource_group.net-rg,
-    azurerm_subnet.vnet-subnet-ghb
+    azurerm_subnet.vnet-ghb-subnet
   ]
 }

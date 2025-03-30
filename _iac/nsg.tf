@@ -1,5 +1,5 @@
-resource "azurerm_network_security_group" "iac-nsg" {
-  name = "${var.APP_NAME}-${var.ENV}-iac-nsg"
+resource "azurerm_network_security_group" "ghb-nsg" {
+  name = "${var.APP_NAME}-${var.ENV}-ghb-nsg"
 
   resource_group_name = azurerm_resource_group.net-rg.name
   location            = azurerm_resource_group.net-rg.location
@@ -201,16 +201,19 @@ resource "azurerm_network_security_group" "iac-nsg" {
 
     source_address_prefix      = "*"
     destination_address_prefix = "Storage"
-
   }
-}
-
-resource "azurerm_subnet_network_security_group_association" "nsg-to-ghb-subnet" {
-  network_security_group_id = azurerm_network_security_group.iac-nsg.id
-  subnet_id                 = azurerm_subnet.vnet-subnet-ghb.id
 
   depends_on = [
-    azurerm_network_security_group.iac-nsg,
-    azurerm_subnet.vnet-subnet-ghb
+    azurerm_resource_group.net-rg
+  ]
+}
+
+resource "azurerm_subnet_network_security_group_association" "ghb-nsg-to-subnet" {
+  network_security_group_id = azurerm_network_security_group.ghb-nsg.id
+  subnet_id                 = azurerm_subnet.vnet-ghb-subnet.id
+
+  depends_on = [
+    azurerm_network_security_group.ghb-nsg,
+    azurerm_subnet.vnet-ghb-subnet
   ]
 }

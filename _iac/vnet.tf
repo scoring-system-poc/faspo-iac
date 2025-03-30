@@ -11,8 +11,8 @@ resource "azurerm_virtual_network" "vnet" {
   ]
 }
 
-resource "azurerm_subnet" "vnet-subnet-ghb" {
-  name = "${var.APP_NAME}-${var.ENV}-vnet-subnet-ghb"
+resource "azurerm_subnet" "vnet-ghb-subnet" {
+  name = "${var.APP_NAME}-${var.ENV}-vnet-ghb-subnet"
 
   resource_group_name  = azurerm_resource_group.net-rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
@@ -20,7 +20,7 @@ resource "azurerm_subnet" "vnet-subnet-ghb" {
   address_prefixes = ["10.0.1.0/24"]
 
   delegation {
-    name = "ghbns-delegation"
+    name = "${var.APP_NAME}-${var.ENV}-ghb-ns-delegation"
     service_delegation {
       name = "GitHub.Network/networkSettings"
       actions = [
@@ -35,8 +35,8 @@ resource "azurerm_subnet" "vnet-subnet-ghb" {
   ]
 }
 
-resource "azurerm_subnet" "vnet-subnet-infra" {
-  name = "${var.APP_NAME}-${var.ENV}-vnet-subnet-infra"
+resource "azurerm_subnet" "vnet-infra-subnet" {
+  name = "${var.APP_NAME}-${var.ENV}-vnet-infra-subnet"
 
   resource_group_name  = azurerm_resource_group.net-rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
