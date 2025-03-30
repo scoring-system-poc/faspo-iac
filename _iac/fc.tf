@@ -11,3 +11,4 @@ resource "azuread_application_federated_identity_credential" "gha-app-fc" {
     azuread_application.gha-app
   ]
 }
+

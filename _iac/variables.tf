@@ -8,10 +8,12 @@ variable "AZURE_SUBSCRIPTION_ID" {
   description = "The ID of subscription under which all resources are located"
 }
 
+
 variable "GHB_DATABASE_ID" {
   type        = string
   description = "The database ID of the organization/enterprise in GitHub"
 }
+
 
 variable "AZURE_LOCATION" {
   type    = string
@@ -23,10 +25,12 @@ variable "AZURE_LOCATION" {
   }
 }
 
+
 variable "PROJECT_NAME" {
   type    = string
   default = "scoring-system-poc"
 }
+
 
 variable "APP_NAME" {
   type    = string
@@ -37,6 +41,7 @@ variable "APP_NAME" {
     error_message = "Invalid app name"
   }
 }
+
 
 variable "ENV" {
   type    = string
@@ -49,3 +54,4 @@ variable "ENV" {
     error_message = "Invalid environment"
   }
 }
+

@@ -16,6 +16,7 @@ resource "azurerm_storage_account" "iac-sa" {
   ]
 }
 
+
 resource "azurerm_storage_container" "iacsa-tfplan-container" {
   name = "tfplan"
 
@@ -35,3 +36,4 @@ resource "azurerm_storage_container" "iacsa-tfstate-container" {
     azurerm_storage_account.iac-sa
   ]
 }
+

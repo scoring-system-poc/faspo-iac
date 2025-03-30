@@ -21,3 +21,4 @@ resource "azapi_resource" "ghb-ns" {
     azurerm_subnet.vnet-ghb-subnet
   ]
 }
+

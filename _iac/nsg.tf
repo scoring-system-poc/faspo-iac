@@ -208,6 +208,7 @@ resource "azurerm_network_security_group" "ghb-nsg" {
   ]
 }
 
+
 resource "azurerm_subnet_network_security_group_association" "ghb-nsg-to-subnet" {
   network_security_group_id = azurerm_network_security_group.ghb-nsg.id
   subnet_id                 = azurerm_subnet.vnet-ghb-subnet.id
@@ -217,3 +218,4 @@ resource "azurerm_subnet_network_security_group_association" "ghb-nsg-to-subnet"
     azurerm_subnet.vnet-ghb-subnet
   ]
 }
+
