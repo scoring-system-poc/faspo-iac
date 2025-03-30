@@ -8,6 +8,7 @@ resource "azurerm_role_assignment" "gha-azsubscr-rbac" {
   ]
 }
 
+
 resource "azurerm_role_assignment" "gha-iacsa-rbac" {
   principal_id         = azuread_service_principal.gha-app-sp.object_id
   scope                = azurerm_storage_account.iac-sa.id
@@ -18,3 +19,4 @@ resource "azurerm_role_assignment" "gha-iacsa-rbac" {
     azurerm_storage_account.iac-sa
   ]
 }
+

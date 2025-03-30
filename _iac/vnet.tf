@@ -11,6 +11,7 @@ resource "azurerm_virtual_network" "vnet" {
   ]
 }
 
+
 resource "azurerm_subnet" "vnet-ghb-subnet" {
   name = "${var.APP_NAME}-${var.ENV}-vnet-ghb-subnet"
 
@@ -35,6 +36,7 @@ resource "azurerm_subnet" "vnet-ghb-subnet" {
   ]
 }
 
+
 resource "azurerm_subnet" "vnet-infra-subnet" {
   name = "${var.APP_NAME}-${var.ENV}-vnet-infra-subnet"
 
@@ -48,3 +50,4 @@ resource "azurerm_subnet" "vnet-infra-subnet" {
     azurerm_virtual_network.vnet
   ]
 }
+

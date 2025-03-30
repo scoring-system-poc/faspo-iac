@@ -15,11 +15,15 @@ terraform {
   }
 }
 
+
 provider "azurerm" {
   subscription_id = var.AZURE_SUBSCRIPTION_ID
   features {}
 }
 
+
 provider "azuread" {}
 
+
 provider "azapi" {}
+

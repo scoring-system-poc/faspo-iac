@@ -3,6 +3,7 @@ resource "azuread_application" "gha-app" {
   prevent_duplicate_names = true
 }
 
+
 resource "azuread_service_principal" "gha-app-sp" {
   client_id = azuread_application.gha-app.client_id
 
