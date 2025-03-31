@@ -20,3 +20,15 @@ resource "azurerm_role_assignment" "gha-iacsa-rbac" {
   ]
 }
 
+
+resource "azuread_directory_role" "app-admin-role" {
+  display_name = "Application Administrator"
+}
+
+
+resource "azuread_app_role_assignment" "gha-azdirectory-rbac" {
+  role_id            = azuread_directory_role.app-admin-role.id
+  principal_id       = azuread_service_principal.gha-app-sp.object_id
+  directory_scopy_id = var.AZURE_TENANT_ID
+}
+
