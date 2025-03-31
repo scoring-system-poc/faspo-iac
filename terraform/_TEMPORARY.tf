@@ -37,7 +37,7 @@ resource "azurerm_role_assignment" "gha-acr-rbac" {
 
   depends_on = [
     azuread_service_principal.gha-app-sp,
-    azurerm_container_registry.acr.id
+    azurerm_container_registry.acr
   ]
 }
 
