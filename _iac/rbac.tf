@@ -1,7 +1,7 @@
 resource "azurerm_role_assignment" "gha-azsubscr-rbac" {
   principal_id         = azuread_service_principal.gha-app-sp.object_id
   scope                = "/subscriptions/${var.AZURE_SUBSCRIPTION_ID}"
-  role_definition_name = "Contributor"
+  role_definition_name = "Owner"
 
   depends_on = [
     azuread_service_principal.gha-app-sp

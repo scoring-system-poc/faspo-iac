@@ -67,7 +67,6 @@ jobs:
             -auto-approve terraform.plan
 
       - name: Cleanup AZ Blob Storage
-        if: always()
         run: |
           az storage blob delete \
             --account-name ${{ secrets.AZURE_IAC_SA }} \
