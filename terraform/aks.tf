@@ -5,9 +5,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
   location            = data.azurerm_resource_group.comp-rg.location
 
   node_resource_group                 = "${var.APP_NAME}-${var.ENV}-aks-nodes-rg"
-  dns_prefix                          = "${var.APP_NAME}-${var.ENV}-aks-dns"
+  dns_prefix_private_cluster          = "${var.APP_NAME}-${var.ENV}-aks-dns"
   private_cluster_enabled             = true
   private_cluster_public_fqdn_enabled = false
+  private_dns_zone_id                 = azurerm_private_dns_zone.aks-pen-dns-zone.id
 
   identity {
     type         = "UserAssigned"

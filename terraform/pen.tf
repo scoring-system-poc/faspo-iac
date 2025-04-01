@@ -15,17 +15,13 @@ resource "azurerm_private_endpoint" "acr-pen" {
   }
 
   private_dns_zone_group {
-    name = "${var.APP_NAME}-${var.ENV}-acr-pen-dns-zone-group"
-    private_dns_zone_ids = [
-      azurerm_private_dns_zone.acr-pen-login-dns-zone.id,
-      azurerm_private_dns_zone.acr-pen-data-dns-zone.id
-    ]
+    name                 = "${var.APP_NAME}-${var.ENV}-acr-pen-dns-zone-group"
+    private_dns_zone_ids = [azurerm_private_dns_zone.acr-pen-dns-zone.id]
   }
 
   depends_on = [
     azurerm_container_registry.acr,
-    azurerm_private_dns_zone.acr-pen-login-dns-zone,
-    azurerm_private_dns_zone.acr-pen-data-dns-zone
+    azurerm_private_dns_zone.acr-pen-dns-zone
   ]
 }
 
