@@ -16,3 +16,4 @@ data "azurerm_resource_group" "net-rg" {
 data "azurerm_resource_group" "sec-rg" {
   name = "${var.APP_NAME}-${var.ENV}-sec-rg"
 }
+
