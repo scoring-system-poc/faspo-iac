@@ -38,3 +38,4 @@ resource "azurerm_cosmosdb_sql_database" "cdb" {
     azurerm_cosmosdb_account.cdb
   ]
 }
+

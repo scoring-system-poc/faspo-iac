@@ -84,3 +84,4 @@ resource "azurerm_private_endpoint" "cdb-pen" {
     azurerm_private_dns_zone.cdb-pen-dns-zone
   ]
 }
+

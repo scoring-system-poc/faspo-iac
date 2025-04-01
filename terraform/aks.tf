@@ -55,5 +55,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
   depends_on = [
     azurerm_user_assigned_identity.aks-cp-uami,
     azurerm_user_assigned_identity.aks-nodepool-uami,
+    azurerm_role_assignment.aks-cp-network-rbac,
+    azurerm_role_assignment.aks-cp-dns-read-rbac,
+    azurerm_role_assignment.aks-cp-dns-write-rbac,
+    azurerm_role_assignment.aks-cp-uami-rbac
   ]
 }

@@ -35,12 +35,12 @@ resource "azurerm_role_assignment" "aks-cp-dns-write-rbac" {
 
 resource "azurerm_role_assignment" "aks-cp-uami-rbac" {
   principal_id         = azurerm_user_assigned_identity.aks-cp-uami.principal_id
-  scope                = azurerm_private_dns_zone.aks-pen-dns-zone.id
+  scope                = azurerm_user_assigned_identity.aks-nodepool-uami.id
   role_definition_name = "Managed Identity Operator"
 
   depends_on = [
     azurerm_user_assigned_identity.aks-cp-uami,
-    azurerm_private_dns_zone.aks-pen-dns-zone
+    azurerm_user_assigned_identity.aks-nodepool-uami
   ]
 }
 
@@ -55,3 +55,4 @@ resource "azurerm_role_assignment" "aks-nodepool-acr-rbac" {
     azurerm_container_registry.acr
   ]
 }
+

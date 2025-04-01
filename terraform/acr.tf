@@ -7,3 +7,4 @@ resource "azurerm_container_registry" "acr" {
   sku                           = "Premium"
   public_network_access_enabled = false
 }
+
