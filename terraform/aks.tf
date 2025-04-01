@@ -4,15 +4,26 @@ resource "azurerm_kubernetes_cluster" "aks" {
   resource_group_name = data.azurerm_resource_group.comp-rg.name
   location            = data.azurerm_resource_group.comp-rg.location
 
-  node_resource_group                 = "${var.APP_NAME}-${var.ENV}-aks-nodes-rg"
-  dns_prefix_private_cluster          = "${var.APP_NAME}-${var.ENV}-aks-dns"
+  node_resource_group = "${var.APP_NAME}-${var.ENV}-aks-nodes-rg"
+
+  dns_prefix_private_cluster = "${var.APP_NAME}-${var.ENV}-aks-dns"
+  private_dns_zone_id        = azurerm_private_dns_zone.aks-pen-dns-zone.id
+
   private_cluster_enabled             = true
   private_cluster_public_fqdn_enabled = false
-  private_dns_zone_id                 = azurerm_private_dns_zone.aks-pen-dns-zone.id
+
+  oidc_issuer_enabled       = true
+  workload_identity_enabled = true
 
   identity {
     type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.aks-uami.id]
+  }
+
+  kubelet_identity {
+    client_id                 = azurerm_user_assigned_identity.aks-uami.client_id
+    object_id                 = azurerm_user_assigned_identity.aks-uami.principal_id
+    user_assigned_identity_id = azurerm_user_assigned_identity.aks-uami.id
   }
 
   default_node_pool {
