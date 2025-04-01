@@ -21,11 +21,13 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   kubelet_identity {
-    client_id = azurerm_user_assigned_identity.aks-uami.client_id
+    client_id                 = azurerm_user_assigned_identity.aks-uami.client_id
+    object_id                 = azurerm_user_assigned_identity.aks-uami.principal_id
+    user_assigned_identity_id = azurerm_user_assigned_identity.aks-uami.id
   }
 
   default_node_pool {
-    name    = "${var.APP_NAME}-${var.ENV}-aks-np"
+    name    = "${var.APP_NAME}${var.ENV}aksnp"
     vm_size = "Standard_DS2_v2"
     os_sku  = "Ubuntu"
 
