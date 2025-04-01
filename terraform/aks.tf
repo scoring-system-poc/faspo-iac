@@ -17,13 +17,13 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.aks-uami.id]
+    identity_ids = [azurerm_user_assigned_identity.aks-cp-uami.id]
   }
 
   kubelet_identity {
-    client_id                 = azurerm_user_assigned_identity.aks-uami.client_id
-    object_id                 = azurerm_user_assigned_identity.aks-uami.principal_id
-    user_assigned_identity_id = azurerm_user_assigned_identity.aks-uami.id
+    client_id                 = azurerm_user_assigned_identity.aks-nodepool-uami.client_id
+    object_id                 = azurerm_user_assigned_identity.aks-nodepool-uami.principal_id
+    user_assigned_identity_id = azurerm_user_assigned_identity.aks-nodepool-uami.id
   }
 
   default_node_pool {
@@ -53,6 +53,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   depends_on = [
-    azurerm_user_assigned_identity.aks-uami
+    azurerm_user_assigned_identity.aks-cp-uami,
+    azurerm_user_assigned_identity.aks-nodepool-uami,
   ]
 }
