@@ -27,7 +27,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   default_node_pool {
-    name    = "${var.APP_NAME}${var.ENV}aksnp"
+    name    = "default"
     vm_size = "Standard_DS2_v2"
     os_sku  = "Ubuntu"
 
