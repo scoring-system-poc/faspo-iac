@@ -73,8 +73,8 @@ resource "azurerm_cosmosdb_sql_role_assignment" "test-app-cdb-rbac" {
   account_name        = azurerm_cosmosdb_account.cdb.name
   role_definition_id  = data.azurerm_cosmosdb_sql_role_definition.cosmos-contributor-role.id
 
-  principal_id        = azurerm_user_assigned_identity.test-app-uami.principal_id
-  scope               = azurerm_cosmosdb_account.cdb.id
+  principal_id = azurerm_user_assigned_identity.test-app-uami.principal_id
+  scope        = azurerm_cosmosdb_account.cdb.id
 
   depends_on = [
     azurerm_cosmosdb_account.cdb,

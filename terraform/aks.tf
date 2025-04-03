@@ -31,9 +31,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
     vm_size = "Standard_B2pls_v2"
     os_sku  = "Ubuntu"
 
-    auto_scaling_enabled = true
-    min_count            = 2
-    max_count            = 10
+    auto_scaling_enabled        = true
+    temporary_name_for_rotation = "rotation"
+    min_count                   = 2
+    max_count                   = 10
 
     vnet_subnet_id = data.azurerm_subnet.vnet-infra-subnet.id
   }
