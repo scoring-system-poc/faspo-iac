@@ -5,8 +5,8 @@ resource "azurerm_federated_identity_credential" "test-app-uami-fc" {
   parent_id = azurerm_user_assigned_identity.test-app-uami.id
   subject   = "system:serviceaccount:default:${var.APP_NAME}-${var.ENV}-test-app-sa"
 
-  audience  = ["api://AzureADTokenExchange"]
-  issuer    = azurerm_kubernetes_cluster.aks.oidc_issuer_url
+  audience = ["api://AzureADTokenExchange"]
+  issuer   = azurerm_kubernetes_cluster.aks.oidc_issuer_url
 
   depends_on = [
     azurerm_user_assigned_identity.test-app-uami,
