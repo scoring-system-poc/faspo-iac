@@ -41,3 +41,16 @@ resource "azurerm_role_assignment" "gha-acr-rbac" {
   ]
 }
 
+
+# TODO: temporary for manual deploymnet (if Argo, then this is not needed)
+resource "azurerm_role_assignment" "gha-aks-rbac" {
+  principal_id         = azuread_service_principal.gha-app-sp.object_id
+  scope                = azurerm_kubernetes_cluster.aks.id
+  role_definition_name = "Azure Kubernetes Service Cluster User Role"
+
+  depends_on = [
+    azuread_service_principal.gha-app-sp,
+    azurerm_kubernetes_cluster.aks
+  ]
+}
+
