@@ -8,6 +8,7 @@ resource "azurerm_cosmosdb_account" "cdb" {
   kind                          = "GlobalDocumentDB"
   public_network_access_enabled = false
 
+  # following is mostly only for testing on private account (to minimize cost)
   capabilities {
     name = "EnableServerless"
   }
