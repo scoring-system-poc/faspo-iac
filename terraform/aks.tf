@@ -15,6 +15,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   oidc_issuer_enabled       = true
   workload_identity_enabled = true
 
+  sku_tier = "Free"
+
   identity {
     type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.aks-cp-uami.id]
@@ -28,7 +30,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   default_node_pool {
     name    = "default"
-    vm_size = "Standard_B2pls_v2"
+    vm_size = "Standard_B2als_v2"
     os_sku  = "Ubuntu"
 
     auto_scaling_enabled        = true
