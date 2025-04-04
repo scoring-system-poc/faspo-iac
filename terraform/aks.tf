@@ -15,7 +15,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   oidc_issuer_enabled       = true
   workload_identity_enabled = true
 
-  sku_tier = "Free"
+  sku_tier = "Free" # only for testing on private account (to minimize cost)
 
   identity {
     type         = "UserAssigned"
@@ -30,7 +30,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   default_node_pool {
     name    = "default"
-    vm_size = "Standard_B2als_v2"
+    vm_size = "Standard_B2als_v2" # only for testing on private account (to minimize cost)
     os_sku  = "Ubuntu"
 
     auto_scaling_enabled        = true
@@ -64,3 +64,25 @@ resource "azurerm_kubernetes_cluster" "aks" {
     azurerm_role_assignment.aks-cp-uami-rbac
   ]
 }
+
+
+resource "azurerm_monitor_diagnostic_setting" "aks-monitor" {
+  name = "${var.APP_NAME}-${var.ENV}-aks-monitor"
+
+  target_resource_id         = azurerm_kubernetes_cluster.aks.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
+
+  enabled_log {
+    category = "audit"
+  }
+
+  enabled_log {
+    category = "container"
+  }
+
+  depends_on = [
+    azurerm_kubernetes_cluster.aks,
+    azurerm_log_analytics_workspace.law
+  ]
+}
+

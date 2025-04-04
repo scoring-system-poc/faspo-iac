@@ -85,3 +85,32 @@ resource "azurerm_private_endpoint" "cdb-pen" {
   ]
 }
 
+
+resource "azurerm_private_endpoint" "law-ampls-pen" {
+  name = "${var.APP_NAME}-${var.ENV}-law-ampls-pen"
+
+  resource_group_name = data.azurerm_resource_group.net-rg.name
+  location            = data.azurerm_resource_group.net-rg.location
+
+  subnet_id                     = data.azurerm_subnet.vnet-infra-subnet.id
+  custom_network_interface_name = "${var.APP_NAME}-${var.ENV}-law-ampls-pen-nic"
+
+  private_service_connection {
+    private_connection_resource_id = azurerm_monitor_private_link_scope.law-ampls.id
+    name                           = "law-ampls-pen-connection"
+    is_manual_connection           = false
+  }
+
+  private_dns_zone_group {
+    name = "${var.APP_NAME}-${var.ENV}-law-ampls-pen-dns-zone-group"
+    private_dns_zone_ids = [
+      azurerm_private_dns_zone.law-ampls-pen-dns-zone.id
+    ]
+  }
+
+  depends_on = [
+    azurerm_log_analytics_workspace.law,
+    azurerm_private_dns_zone.law-ampls-pen-dns-zone
+  ]
+}
+
