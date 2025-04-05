@@ -1,0 +1,55 @@
+name: "[manual] terraform unlock"
+run-name: "[manual] terraform unlock"
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENVIRONMENT:
+        description: "Environment to unlock"
+        required: true
+      LOCK-ID:
+        description: "Lock ID to unlock"
+        required: true
+
+jobs:
+  terraform-unlock:
+    runs-on:
+      group: azure-integrated-runners
+
+    environment: env/${{ inputs.ENVIRONMENT }}
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: terraform/
+
+    permissions:
+      id-token: write
+
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.SELF_DEPLOY_KEY }}
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform init
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ secrets.AZURE_IAC_RG }}" \
+            -backend-config="storage_account_name=${{ secrets.AZURE_IAC_SA }}"
+
+      - name: Terraform unlock
+        run: |
+          terraform force-unlock -force ${{ inputs.LOCK-ID }}

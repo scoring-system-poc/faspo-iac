@@ -58,12 +58,13 @@ jobs:
             -backend-config="resource_group_name=${{ secrets.AZURE_IAC_RG }}" \
             -backend-config="storage_account_name=${{ secrets.AZURE_IAC_SA }}"
 
-      - name: Terraform Apply
+      - name: Terraform apply
         run: |
           terraform apply \
             -var="AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" \
             -var="AZURE_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" \
             -var="AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+            -var="ARGOCD_DEPLOY_KEY=${{ secrets.ARGOCD_DEPLOY_KEY }}" \
             -auto-approve terraform.plan
 
       - name: Cleanup AZ Blob Storage
