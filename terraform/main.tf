@@ -9,11 +9,11 @@ terraform {
       version = "~>3.2.0"
     }
   }
-  backend "azurerm" {
-    use_azuread_auth = true
-    container_name   = "tfstate"
-    key              = "terraform.tfstate"
-  }
+#  backend "azurerm" {
+#    use_azuread_auth = true
+#    container_name   = "tfstate"
+#    key              = "terraform.tfstate"
+#  }
 }
 
 

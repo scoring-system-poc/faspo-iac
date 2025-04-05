@@ -99,18 +99,49 @@ resource "azurerm_private_endpoint" "law-ampls-pen" {
     private_connection_resource_id = azurerm_monitor_private_link_scope.law-ampls.id
     name                           = "law-ampls-pen-connection"
     is_manual_connection           = false
+    subresource_names              = ["azuremonitor"]
   }
 
   private_dns_zone_group {
-    name = "${var.APP_NAME}-${var.ENV}-law-ampls-pen-dns-zone-group"
+    name = "${var.APP_NAME}-${var.ENV}-monitor-pen-dns-zone-group"
     private_dns_zone_ids = [
-      azurerm_private_dns_zone.law-ampls-pen-dns-zone.id
+      azurerm_private_dns_zone.monitor-pen-dns-zone.id
     ]
   }
 
   depends_on = [
     azurerm_log_analytics_workspace.law,
-    azurerm_private_dns_zone.law-ampls-pen-dns-zone
+    azurerm_private_dns_zone.monitor-pen-dns-zone
+  ]
+}
+
+
+resource "azurerm_private_endpoint" "appi-ampls-pen" {
+  name = "${var.APP_NAME}-${var.ENV}-appi-ampls-pen"
+
+  resource_group_name = data.azurerm_resource_group.net-rg.name
+  location            = data.azurerm_resource_group.net-rg.location
+
+  subnet_id                     = data.azurerm_subnet.vnet-infra-subnet.id
+  custom_network_interface_name = "${var.APP_NAME}-${var.ENV}-appi-ampls-pen-nic"
+
+  private_service_connection {
+    private_connection_resource_id = azurerm_monitor_private_link_scope.appi-ampls.id
+    name                           = "appi-ampls-pen-connection"
+    is_manual_connection           = false
+    subresource_names              = ["azuremonitor"]
+  }
+
+  private_dns_zone_group {
+    name = "${var.APP_NAME}-${var.ENV}-monitor-pen-dns-zone-group"
+    private_dns_zone_ids = [
+      azurerm_private_dns_zone.monitor-pen-dns-zone.id
+    ]
+  }
+
+  depends_on = [
+    azurerm_application_insights.appi,
+    azurerm_private_dns_zone.monitor-pen-dns-zone
   ]
 }
 

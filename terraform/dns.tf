@@ -16,7 +16,7 @@ resource "azurerm_private_dns_zone" "cdb-pen-dns-zone" {
 }
 
 
-resource "azurerm_private_dns_zone" "law-ampls-pen-dns-zone" {
+resource "azurerm_private_dns_zone" "monitor-pen-dns-zone" {
   name                = "privatelink.monitor.azure.com"
   resource_group_name = data.azurerm_resource_group.net-rg.name
 }
@@ -61,15 +61,15 @@ resource "azurerm_private_dns_zone_virtual_network_link" "cdb-pen-dns-zone-vnet-
 }
 
 
-resource "azurerm_private_dns_zone_virtual_network_link" "law-ampls-zone-vnet-link" {
-  name                = "${var.APP_NAME}-${var.ENV}-law-ampls-pen-dns-zone-vnet-link"
+resource "azurerm_private_dns_zone_virtual_network_link" "monitor-zone-vnet-link" {
+  name                = "${var.APP_NAME}-${var.ENV}-monitor-pen-dns-zone-vnet-link"
   resource_group_name = data.azurerm_resource_group.net-rg.name
 
-  private_dns_zone_name = azurerm_private_dns_zone.law-ampls-pen-dns-zone.name
+  private_dns_zone_name = azurerm_private_dns_zone.monitor-pen-dns-zone.name
   virtual_network_id    = data.azurerm_virtual_network.vnet.id
 
   depends_on = [
-    azurerm_private_dns_zone.cdb-pen-dns-zone
+    azurerm_private_dns_zone.monitor-pen-dns-zone
   ]
 }
 
