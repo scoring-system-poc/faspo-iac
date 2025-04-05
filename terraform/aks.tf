@@ -17,6 +17,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   sku_tier = "Free" # only for testing on private account (to minimize cost)
 
+  azure_active_directory_role_based_access_control {
+    tenant_id          = var.AZURE_TENANT_ID
+    azure_rbac_enabled = true
+  }
+
   identity {
     type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.aks-cp-uami.id]
@@ -62,6 +67,26 @@ resource "azurerm_kubernetes_cluster" "aks" {
     azurerm_role_assignment.aks-cp-dns-read-rbac,
     azurerm_role_assignment.aks-cp-dns-write-rbac,
     azurerm_role_assignment.aks-cp-uami-rbac
+  ]
+}
+
+
+resource "kubernetes_namespace" "aks-apps-ns" {
+  metadata {
+    name = "${var.APP_NAME}-${var.ENV}-apps"
+  }
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
+  ]
+}
+
+
+resource "kubernetes_namespace" "aks-argocd-ns" {
+  metadata {
+    name = "${var.APP_NAME}-${var.ENV}-argocd"
+  }
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
   ]
 }
 

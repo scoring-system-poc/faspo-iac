@@ -51,3 +51,9 @@ variable "ENV" {
   }
 }
 
+
+variable "ARGOCD_DEPLOY_KEY" {
+  type        = string
+  sensitive   = true
+  description = "SSH private key for ArgoCD to access the Git repository with APPS configuration."
+}
