@@ -56,29 +56,3 @@ resource "azurerm_role_assignment" "aks-nodepool-acr-rbac" {
   ]
 }
 
-
-data "azurerm_cosmosdb_sql_role_definition" "cosmos-contributor-role" {
-  resource_group_name = data.azurerm_resource_group.data-rg.name
-  account_name        = azurerm_cosmosdb_account.cdb.name
-  role_definition_id  = "00000000-0000-0000-0000-000000000002"
-
-  depends_on = [
-    azurerm_cosmosdb_account.cdb
-  ]
-}
-
-
-resource "azurerm_cosmosdb_sql_role_assignment" "test-app-cdb-rbac" {
-  resource_group_name = data.azurerm_resource_group.data-rg.name
-  account_name        = azurerm_cosmosdb_account.cdb.name
-  role_definition_id  = data.azurerm_cosmosdb_sql_role_definition.cosmos-contributor-role.id
-
-  principal_id = azurerm_user_assigned_identity.test-app-uami.principal_id
-  scope        = azurerm_cosmosdb_account.cdb.id
-
-  depends_on = [
-    azurerm_cosmosdb_account.cdb,
-    azurerm_user_assigned_identity.test-app-uami
-  ]
-}
-

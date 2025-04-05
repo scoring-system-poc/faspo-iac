@@ -65,24 +65,3 @@ resource "azurerm_kubernetes_cluster" "aks" {
   ]
 }
 
-
-resource "azurerm_monitor_diagnostic_setting" "aks-monitor" {
-  name = "${var.APP_NAME}-${var.ENV}-aks-monitor"
-
-  target_resource_id         = azurerm_kubernetes_cluster.aks.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
-
-  enabled_log {
-    category = "audit"
-  }
-
-  enabled_log {
-    category = "container"
-  }
-
-  depends_on = [
-    azurerm_kubernetes_cluster.aks,
-    azurerm_log_analytics_workspace.law
-  ]
-}
-
