@@ -4,10 +4,10 @@ run-name: "[manual] terraform unlock"
 on:
   workflow_dispatch:
     inputs:
-      environment:
+      ENVIRONMENT:
         description: "Environment to unlock"
         required: true
-      lock-id:
+      LOCK-ID:
         description: "Lock ID to unlock"
         required: true
 
@@ -16,7 +16,7 @@ jobs:
     runs-on:
       group: azure-integrated-runners
 
-    environment: env/${{ inputs.environment }}
+    environment: env/${{ inputs.ENVIRONMENT }}
 
     defaults:
       run:
@@ -47,4 +47,4 @@ jobs:
 
       - name: Terraform unlock
         run: |
-          terraform force-unlock -force ${{ inputs.lock-id }}
+          terraform force-unlock -force ${{ inputs.LOCK-ID }}
