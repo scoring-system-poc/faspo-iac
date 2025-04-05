@@ -64,6 +64,7 @@ jobs:
             -var="AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" \
             -var="AZURE_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" \
             -var="AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+            -var="ARGOCD_DEPLOY_KEY=${{ secrets.ARGOCD_DEPLOY_KEY }}" \
             -auto-approve terraform.plan
 
       - name: Cleanup AZ Blob Storage
