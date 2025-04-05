@@ -75,6 +75,7 @@ resource "kubernetes_namespace" "aks-apps-ns" {
   metadata {
     name = "${var.APP_NAME}-${var.ENV}-apps"
   }
+
   depends_on = [
     azurerm_kubernetes_cluster.aks
   ]
@@ -85,6 +86,7 @@ resource "kubernetes_namespace" "aks-argocd-ns" {
   metadata {
     name = "${var.APP_NAME}-${var.ENV}-argocd"
   }
+
   depends_on = [
     azurerm_kubernetes_cluster.aks
   ]
