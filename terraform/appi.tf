@@ -14,9 +14,7 @@ resource "azurerm_application_insights" "appi" {
   internet_query_enabled     = false
 
   depends_on = [
-    azurerm_log_analytics_workspace.law,
-    azurerm_monitor_private_link_scope.law-ampls,
-    azurerm_monitor_private_link_scoped_service.law-ampls-link
+    azurerm_log_analytics_workspace.law
   ]
 }
 
