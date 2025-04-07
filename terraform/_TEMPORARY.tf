@@ -50,6 +50,23 @@ resource "azurerm_user_assigned_identity" "test-app-uami" {
 }
 
 
+resource "azurerm_federated_identity_credential" "test-app-uami-fc" {
+  name                = "${var.APP_NAME}-${var.ENV}-test-app-uami-fc"
+  resource_group_name = data.azurerm_resource_group.sec-rg.name
+
+  parent_id = azurerm_user_assigned_identity.test-app-uami.id
+  subject   = "system:serviceaccount:${var.APP_NAME}-${var.ENV}-apps:${var.APP_NAME}-${var.ENV}-test-app-sa"
+
+  audience = ["api://AzureADTokenExchange"]
+  issuer   = azurerm_kubernetes_cluster.aks.oidc_issuer_url
+
+  depends_on = [
+    azurerm_user_assigned_identity.test-app-uami,
+    azurerm_kubernetes_cluster.aks
+  ]
+}
+
+
 data "azurerm_cosmosdb_sql_role_definition" "cosmos-contributor-role" {
   resource_group_name = data.azurerm_resource_group.data-rg.name
   account_name        = azurerm_cosmosdb_account.cdb.name
