@@ -29,8 +29,8 @@ resource "helm_release" "argocd" {
           helm = {
             type      = "helm"
             name      = azurerm_container_registry.acr.name
-            url       = "oci://${azurerm_container_registry.acr.name}.azurecr.io/helm"
-            username  = "argocd"
+            url       = "${azurerm_container_registry.acr.name}.azurecr.io/helm"
+            username  = azurerm_container_registry_token.argocd-acr-token.name
             password  = azurerm_container_registry_token_password.argocd-acr-token-pwd.password1.0.value
             enableOCI = "true"
           }
@@ -73,6 +73,7 @@ resource "helm_release" "argocd" {
   depends_on = [
     azurerm_kubernetes_cluster.aks,
     azurerm_container_registry.acr,
+    azurerm_container_registry_token.argocd-acr-token,
     azurerm_container_registry_token_password.argocd-acr-token-pwd,
     kubernetes_namespace.aks-argocd-ns
   ]
