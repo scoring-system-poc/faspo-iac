@@ -4,14 +4,13 @@ resource "helm_release" "argocd" {
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
 
-  namespace        = "argocd"
-  create_namespace = true
+  namespace = kubernetes_namespace.aks-argocd-ns.metadata.0.name
 
   values = [
     yamlencode({
       crds = {
         additionalLabels = {
-          "argocd.argoproj.io/managed-by" = "argocd"
+          "argocd.argoproj.io/managed-by" = kubernetes_namespace.aks-argocd-ns.metadata.0.name
         }
       }
       configs = {
@@ -43,7 +42,7 @@ resource "helm_release" "argocd" {
           kind       = "Application"
           metadata = {
             name      = "${var.APP_NAME}-apps"
-            namespace = "argocd"
+            namespace = kubernetes_namespace.aks-argocd-ns.metadata.0.name
             finalizers = [
               "resources-finalizer.argocd.argoproj.io"
             ]
@@ -57,7 +56,7 @@ resource "helm_release" "argocd" {
             }
             destination = {
               server    = "https://kubernetes.default.svc"
-              namespace = "argocd"
+              namespace = kubernetes_namespace.aks-argocd-ns.metadata.0.name
             }
             syncPolicy = {
               automated = {
@@ -74,7 +73,8 @@ resource "helm_release" "argocd" {
   depends_on = [
     azurerm_kubernetes_cluster.aks,
     azurerm_container_registry.acr,
-    azurerm_container_registry_token_password.argocd-acr-token-pwd
+    azurerm_container_registry_token_password.argocd-acr-token-pwd,
+    kubernetes_namespace.aks-argocd-ns
   ]
 }
 
