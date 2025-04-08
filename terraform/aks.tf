@@ -72,16 +72,16 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
 
 resource "kubernetes_namespace" "aks-apps-ns" {
-   metadata {
-     name = "${var.APP_NAME}-${var.ENV}-apps"
-     labels = {
-       "argocd.argoproj.io/managed-by" = "${var.APP_NAME}-${var.ENV}-argocd"
-     }
-   }
-   depends_on = [
-     azurerm_kubernetes_cluster.aks
-   ]
- }
+  metadata {
+    name = "${var.APP_NAME}-${var.ENV}-apps"
+    labels = {
+      "argocd.argoproj.io/managed-by" = "${var.APP_NAME}-${var.ENV}-argocd"
+    }
+  }
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
+  ]
+}
 
 
 resource "kubernetes_namespace" "aks-argocd-ns" {
