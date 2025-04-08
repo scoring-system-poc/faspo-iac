@@ -57,6 +57,18 @@ resource "azurerm_role_assignment" "aks-nodepool-acr-rbac" {
 }
 
 
+resource "azurerm_role_assignment" "export-service-gha-acr-rbac" {
+  principal_id         = azuread_service_principal.export-service-gha-sp.object_id
+  scope                = azurerm_container_registry.acr.id
+  role_definition_name = "AcrPush"
+
+  depends_on = [
+    azuread_service_principal.export-service-gha-sp,
+    azurerm_container_registry.acr
+  ]
+}
+
+
 resource "azurerm_role_assignment" "store-service-gha-acr-rbac" {
   principal_id         = azuread_service_principal.store-service-gha-sp.object_id
   scope                = azurerm_container_registry.acr.id
@@ -65,6 +77,21 @@ resource "azurerm_role_assignment" "store-service-gha-acr-rbac" {
   depends_on = [
     azuread_service_principal.store-service-gha-sp,
     azurerm_container_registry.acr
+  ]
+}
+
+
+resource "azurerm_cosmosdb_sql_role_assignment" "export-service-cdb-rbac" {
+  resource_group_name = data.azurerm_resource_group.data-rg.name
+  account_name        = azurerm_cosmosdb_account.cdb.name
+  role_definition_id  = data.azurerm_cosmosdb_sql_role_definition.cosmos-reader-role.id
+
+  principal_id = azurerm_user_assigned_identity.export-service-uami.principal_id
+  scope        = azurerm_cosmosdb_account.cdb.id
+
+  depends_on = [
+    azurerm_cosmosdb_account.cdb,
+    azurerm_user_assigned_identity.store-service-uami
   ]
 }
 
