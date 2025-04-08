@@ -1,7 +1,7 @@
 resource "azuread_application_federated_identity_credential" "export-service-gha-app-fc" {
   display_name = "${var.APP_NAME}-${var.ENV}-export-service-gha-fc"
 
-  application_id = azuread_application.store-service-gha-app.id
+  application_id = azuread_application.export-service-gha-app.id
 
   issuer    = "https://token.actions.githubusercontent.com"
   subject   = "repo:${var.PROJECT_NAME}/${var.APP_NAME}-export-service:ref:refs/heads/main"
@@ -17,7 +17,7 @@ resource "azurerm_federated_identity_credential" "export-service-uami-fc" {
   name                = "${var.APP_NAME}-${var.ENV}-export-service-uami-fc"
   resource_group_name = data.azurerm_resource_group.sec-rg.name
 
-  parent_id = azurerm_user_assigned_identity.store-service-uami.id
+  parent_id = azurerm_user_assigned_identity.export-service-uami.id
   subject   = "system:serviceaccount:${var.APP_NAME}-${var.ENV}-apps:${var.APP_NAME}-${var.ENV}-export-service-sa"
 
   audience = ["api://AzureADTokenExchange"]
