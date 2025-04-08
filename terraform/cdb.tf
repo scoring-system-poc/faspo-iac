@@ -106,22 +106,6 @@ resource "azurerm_cosmosdb_sql_container" "metadata-container" {
 }
 
 
-resource "azurerm_cosmosdb_sql_container" "metadata-container" {
-  name = "metadata"
-
-  resource_group_name = data.azurerm_resource_group.data-rg.name
-  account_name        = azurerm_cosmosdb_account.cdb.name
-  database_name       = azurerm_cosmosdb_sql_database.cdb.name
-
-  partition_key_paths = ["/id"] # f"{doc_type}#{part}"
-
-  depends_on = [
-    azurerm_cosmosdb_account.cdb,
-    azurerm_cosmosdb_sql_database.cdb
-  ]
-}
-
-
 resource "azurerm_cosmosdb_sql_container" "codetable-container" {
   name = "codetable"
 
