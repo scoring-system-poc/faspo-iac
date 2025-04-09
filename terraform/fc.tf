@@ -75,6 +75,21 @@ resource "azuread_application_federated_identity_credential" "store-service-gha-
 }
 
 
+resource "azuread_application_federated_identity_credential" "model-service-gha-app-fc" {
+  display_name = "${var.APP_NAME}-${var.ENV}-model-service-gha-fc"
+
+  application_id = azuread_application.model-service-gha-app.id
+
+  issuer    = "https://token.actions.githubusercontent.com"
+  subject   = "repo:${var.PROJECT_NAME}/${var.APP_NAME}-model-service:ref:refs/heads/main"
+  audiences = ["api://AzureADTokenExchange"]
+
+  depends_on = [
+    azuread_application.model-service-gha-app
+  ]
+}
+
+
 resource "azurerm_federated_identity_credential" "store-service-uami-fc" {
   name                = "${var.APP_NAME}-${var.ENV}-store-service-uami-fc"
   resource_group_name = data.azurerm_resource_group.sec-rg.name
