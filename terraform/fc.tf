@@ -90,6 +90,21 @@ resource "azuread_application_federated_identity_credential" "model-service-gha-
 }
 
 
+resource "azuread_application_federated_identity_credential" "request-handler-gha-app-fc" {
+  display_name = "${var.APP_NAME}-${var.ENV}-request-handler-gha-fc"
+
+  application_id = azuread_application.request-handler-gha-app.id
+
+  issuer    = "https://token.actions.githubusercontent.com"
+  subject   = "repo:${var.PROJECT_NAME}/${var.APP_NAME}-request-handler:ref:refs/heads/main"
+  audiences = ["api://AzureADTokenExchange"]
+
+  depends_on = [
+    azuread_application.request-handler-gha-app
+  ]
+}
+
+
 resource "azurerm_federated_identity_credential" "store-service-uami-fc" {
   name                = "${var.APP_NAME}-${var.ENV}-store-service-uami-fc"
   resource_group_name = data.azurerm_resource_group.sec-rg.name
@@ -102,6 +117,23 @@ resource "azurerm_federated_identity_credential" "store-service-uami-fc" {
 
   depends_on = [
     azurerm_user_assigned_identity.store-service-uami,
+    azurerm_kubernetes_cluster.aks
+  ]
+}
+
+
+resource "azurerm_federated_identity_credential" "request-handler-uami-fc" {
+  name                = "${var.APP_NAME}-${var.ENV}-request-handler-uami-fc"
+  resource_group_name = data.azurerm_resource_group.sec-rg.name
+
+  parent_id = azurerm_user_assigned_identity.request-handler-uami.id
+  subject   = "system:serviceaccount:${var.APP_NAME}-${var.ENV}-apps:${var.APP_NAME}-${var.ENV}-request-handler-sa"
+
+  audience = ["api://AzureADTokenExchange"]
+  issuer   = azurerm_kubernetes_cluster.aks.oidc_issuer_url
+
+  depends_on = [
+    azurerm_user_assigned_identity.request-handler-uami,
     azurerm_kubernetes_cluster.aks
   ]
 }
