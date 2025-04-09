@@ -57,6 +57,18 @@ resource "azurerm_role_assignment" "aks-nodepool-acr-rbac" {
 }
 
 
+resource "azurerm_role_assignment" "batch-data-service-gha-acr-rbac" {
+  principal_id         = azuread_service_principal.batch-data-service-gha-sp.object_id
+  scope                = azurerm_container_registry.acr.id
+  role_definition_name = "AcrPush"
+
+  depends_on = [
+    azuread_service_principal.batch-data-service-gha-sp,
+    azurerm_container_registry.acr
+  ]
+}
+
+
 resource "azurerm_role_assignment" "export-service-gha-acr-rbac" {
   principal_id         = azuread_service_principal.export-service-gha-sp.object_id
   scope                = azurerm_container_registry.acr.id

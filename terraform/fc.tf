@@ -1,3 +1,18 @@
+resource "azuread_application_federated_identity_credential" "batch-data-service-gha-app-fc" {
+  display_name = "${var.APP_NAME}-${var.ENV}-batch-data-service-gha-fc"
+
+  application_id = azuread_application.batch-data-service-gha-app.id
+
+  issuer    = "https://token.actions.githubusercontent.com"
+  subject   = "repo:${var.PROJECT_NAME}/${var.APP_NAME}-batch-data-service:ref:refs/heads/main"
+  audiences = ["api://AzureADTokenExchange"]
+
+  depends_on = [
+    azuread_application.batch-data-service-gha-app
+  ]
+}
+
+
 resource "azuread_application_federated_identity_credential" "export-service-gha-app-fc" {
   display_name = "${var.APP_NAME}-${var.ENV}-export-service-gha-fc"
 
