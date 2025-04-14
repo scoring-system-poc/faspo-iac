@@ -64,7 +64,7 @@ resource "azurerm_cosmosdb_sql_container" "document-container" {
   account_name        = azurerm_cosmosdb_account.cdb.name
   database_name       = azurerm_cosmosdb_sql_database.cdb.name
 
-  partition_key_paths = ["/subjectId"]
+  partition_key_paths = ["/subject_id"]
   default_ttl         = -1
 
   indexing_policy {
@@ -114,6 +114,22 @@ resource "azurerm_cosmosdb_sql_container" "codetable-container" {
   database_name       = azurerm_cosmosdb_sql_database.cdb.name
 
   partition_key_paths = ["/id"] # f"{doc_type}#{part}#{cell_row}#{cell_col}"
+
+  depends_on = [
+    azurerm_cosmosdb_account.cdb,
+    azurerm_cosmosdb_sql_database.cdb
+  ]
+}
+
+
+resource "azurerm_cosmosdb_sql_container" "process-container" {
+  name = "process"
+
+  resource_group_name = data.azurerm_resource_group.data-rg.name
+  account_name        = azurerm_cosmosdb_account.cdb.name
+  database_name       = azurerm_cosmosdb_sql_database.cdb.name
+
+  partition_key_paths = ["/id"]
 
   depends_on = [
     azurerm_cosmosdb_account.cdb,
