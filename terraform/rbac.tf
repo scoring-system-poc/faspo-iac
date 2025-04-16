@@ -162,7 +162,7 @@ resource "azurerm_cosmosdb_sql_role_assignment" "store-service-cdb-rbac" {
 resource "azurerm_cosmosdb_sql_role_assignment" "request-handler-cdb-rbac" {
   resource_group_name = data.azurerm_resource_group.data-rg.name
   account_name        = azurerm_cosmosdb_account.cdb.name
-  role_definition_id  = data.azurerm_cosmosdb_sql_role_definition.cosmos-reader-role.id
+  role_definition_id  = data.azurerm_cosmosdb_sql_role_definition.cosmos-contributor-role.id  # temp for testing (should have only read access in actual version)
 
   principal_id = azurerm_user_assigned_identity.request-handler-uami.principal_id
   scope        = azurerm_cosmosdb_account.cdb.id
