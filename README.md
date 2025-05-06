@@ -1,4 +1,4 @@
-# FASPO IaC
+# [ FASPO ] IaC
 
 This repository contains the Infrastructure as Code (IaC) for the FASPO project. 
 It uses Terraform in combination with GitHub Actions to manage and automatically deploy the infrastructure in MS Azure.
